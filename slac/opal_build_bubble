@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+#Modules needed for opal
+module load gmp-6.1.2-gcc-5.3.0-jazjafv 
+module load mpfr-3.1.5-gcc-5.3.0-4xici2e
+module load mpc-1.0.3-gcc-5.3.0-wgwmpsw
+#module load hdf5-1.10.1-gcc-4.9.4-dnuggv3
+module load gsl-2.3-gcc-4.9.4-votpdb3
+#module load boost-1.64.0-gcc-5.3.0-deb2tor 
+
+# Point to icc and icpc
+I_MPI_CC=cc;I_MPI_CXX=cxx;I_MPI_F90=ftn;I_MPI_F77=ftn
+export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
+
+CC=mpicc;CXX=mpicxx;F90=ftn;F77=ftn
+export CC CXX F90 F77
+
+
+export SOFTWARE="/nfs/slac/g/beamphysics/nneveu/opal_test/software"
+export PATH="$SOFTWARE/H5hut-2.0.0rc4_build:${PATH}"
+
+export H5HUT_HOME="/nfs/slac/g/beamphysics/nneveu/opal_test/software/H5hut-2.0.0rc4_build"
+echo $H5HUT_HOME
+export H5HUT_PREFIX=$H5HUT_HOME
+export H5HUT_DIR=$H5HUT_HOME
+export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
+export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
+
+export BOOST_HOME=$SOFTWARE/boost_1_68_0_build/
+export BOOST_DIR=$BOOST_HOME
+export BOOST_PREFIX=$BOOST_HOME
+export BOOST_INCLUDE_DIR=$BOOST_HOME/include
+export BOOST_LIBRARY_DIR=$BOOST_HOME/lib
+export BOOST_ROOT=$SOFTWARE/boost_1_68_0_build/
+echo $BOOST_ROOT
+echo $BOOST_DIR
+
+
+#cmake -DCMAKE_INSTALL_PREFIX=/nfs/slac/g/beamphysics/opal_test/software -DCMAKE_CXX_FLAGS="-lsz -skylake-avx512" .. 
+
