@@ -1,0 +1,65 @@
+#!/bin/bash
+
+module purge
+
+#module load intel-parallel-studio/cluster.2017.4-wyg4gfu
+module load intel
+module load intel-mpi #/2017.3-dfphq6k
+module load cmake #/3.8.1-orygmpj
+module load gmp   #/6.1.2-jg3ofko
+module load mpfr  #/3.1.5-kdka53b
+module load mpc   #/1.0.3-vz2d2ni
+module load hdf5/1.10.1-wcenhsf  #/1.10.1-vzncl5h 
+module load gsl   #/2.4 
+module load boost #/1.66.0-yezpm5j #boost #/1.63.0-m64qkx4 #/1.63.0-yyrgc3r
+module load intel-mkl
+module load szip
+
+# Point to icc and icpc
+I_MPI_CC=icc;I_MPI_CXX=icpc;I_MPI_F90=ifort;I_MPI_F77=ifort
+export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
+
+CC=mpiicc;CXX=mpiicpc;F90=ifort;F77=ifort
+export CC CXX F90 F77
+
+
+export SOFTWARE="/lcrc/project/AWA-beam-dynamics/software"
+export PATH="$SOFTWARE/H5hut-2.0.0rc4_build:${PATH}"
+
+export H5HUT_HOME=$SOFTWARE/H5hut-2.0.0rc4_build
+export H5HUT_PREFIX=$H5HUT_HOME
+export H5HUT_DIR=$H5HUT_HOME
+export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
+export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
+
+#export BOOST_HOME=$SOFTWARE/boost_1_62_0_build/
+#export BOOST_DIR=$BOOST_HOME
+#export BOOST_PREFIX=$BOOST_HOME
+#export BOOST_INCLUDE_DIR=$BOOST_HOME/include
+#export BOOST_LIBRARY_DIR=$BOOST_HOME/lib
+#export BOOST_ROOT=$NHOME/boost_1_62_0_build/
+#echo $BOOST_ROOT
+#echo $BOOST_DIR
+
+
+#########################################################
+#ABOVE NEEDED FOR ALL BUILDS
+########################################################
+
+#Builds done in the past: 
+
+#cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software -DCMAKE_CXX_FLAGS="-lsz" ..
+
+#LATEST CMAKE CALL:
+#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/AWA-beam-dynamics/software/bdw -DCMAKE_CXX_FLAGS="-lsz -axCORE-AVX2" .. 
+#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/AWA-beam-dynamics/software/knl -DCMAKE_CXX_FLAGS="-lsz -axMIC-AVX512" ..
+
+#Include intel opt reports:
+#cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software/opal-1.9/knl -DCMAKE_CXX_FLAGS="-lsz -axMIC-AVX512 -qopt-report=3 -qopt-report-phase=vec" ..  
+
+#make -j 30 
+#make install
+
+pwd
+
+
