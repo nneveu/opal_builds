@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#1. Load dependancies (software that opal needs):
+module load cmake 
+module remove darshan
+module load cray-hdf5-parallel
+module load h5hut-parallel
+module load gsl   
+module load boost 
+module load gcc
+
+#2. Point to the cray compiler wrappers (icc and icpc)
+I_MPI_CC=cc;I_MPI_CXX=CC;I_MPI_F90=ftn;I_MPI_F77=ftn
+export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
+
+CC=cc;CXX=CC;F90=ftn;F77=ftn
+export CC CXX F90 F77
+
+#Note: Steps #1 and #2 can be done by sourcing this file: 
+# > source opal_build_cori
+
+#Steps #3-5 should be done on the command line:
+
+#3. Download a copy of the opal source code.
+#This step can be skipped if you already have a copy of the opal src.
+# > git clone https://gitlab.psi.ch/OPAL/src.git
+
+#3.b If you have a copy of src already, make sure it is up to date
+# > cd /src
+# > git pull #(while in the opal /src directory)
+
+#4. Make a build directory in the opal src directory
+# > mkdir build #(while in /src from step #3.b)
+# > cd build 
+
+#Note: this directory will stay in place indefinitely.
+# If you build opal again, you do not need to make a new build directory.
+# Before a second build, I recommend taring the build dir (with a date in the name), 
+# move the tarfile somewhere safe (storage), then delete the build dir contents.
+# This way cmake will save files to an empty directory every time.
+
+#5. Run cmake to configure build
+# Note: change the path to where you want the opal executable to be installed
+#cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software .. 
+
+#6. Run make and install to generate executables
+# > make -j 8 
+# > make install
+
+
+
