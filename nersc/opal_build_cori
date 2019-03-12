@@ -4,22 +4,30 @@
 module load cmake 
 module remove darshan
 module load cray-hdf5-parallel
-module load h5hut-parallel
+#module load h5hut-parallel #Using H5hut build in software dir
 module load gsl   
 module load boost 
-module load gcc/6.1.0 #This version needed for specific c++11 support
+module load gcc #/6.1.0 #This version needed for specific c++11 support?
+
+export SOFTWARE="/global/project/projectdirs/m669/nneveu/opal_builds/nersc"
+export PATH="$SOFTWARE/H5hut-2.0.0rc4/build:${PATH}"
+export H5HUT_HOME=$SOFTWARE/H5hut-2.0.0rc4/build
+export H5HUT_PREFIX=$H5HUT_HOME
+export H5HUT_DIR=$H5HUT_HOME
+export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
+export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
 
 #2. Point to the cray compiler wrappers (icc and icpc)
 I_MPI_CC=cc;I_MPI_CXX=CC;I_MPI_F90=ftn;I_MPI_F77=ftn
 export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
-
+#
 CC=cc;CXX=CC;F90=ftn;F77=ftn
 export CC CXX F90 F77
 
 #Note: Steps #1 and #2 can be done by sourcing this file: 
 # > source opal_build_cori
 
-#Steps #3-5 should be done on the command line:
+#Steps #3-6 should be done on the command line:
 
 #3. Download a copy of the opal source code.
 #This step can be skipped if you already have a copy of the opal src.
@@ -50,21 +58,15 @@ export CC CXX F90 F77
 ####################################################################
 ###################################################################
 # Build steps from NERSC
-module load cmake
-module remove darshan
-module load cray-hdf5-parallel
-module load h5hut-parallel
-module load gsl
-module load boost
-module load gcc/6.1.0
+# 1. load modules from above
  
-cd /global/project/projectdirs/m669/nneveu/opal_builds/nersc/src
-sed -i "s/GSL_LIBRARY gsl/GSL_LIBRARY libgsl.a/g; s/GSL_CBLAS_LIBRARY gslcblas/GSL_CBLAS_LIBRARY libgslcblas.a/g" CMakeModules/FindGSL.cmake
+#####cd /global/project/projectdirs/m669/nneveu/opal_builds/nersc/src
+#####sed -i "s/GSL_LIBRARY gsl/GSL_LIBRARY libgsl.a/g; s/GSL_CBLAS_LIBRARY gslcblas/GSL_CBLAS_LIBRARY libgslcblas.a/g" CMakeModules/FindGSL.cmake
+##### 
+#####mkdir build.intel_gcc7
+#####cd build.intel_gcc7
+#####cmake -DCMAKE_INSTALL_PREFIX=/global/project/projectdirs/m669/nneveu/opal/2.1.0_gcc7 ..
  
-mkdir build.intel
-cd build.intel
-cmake -DCMAKE_INSTALL_PREFIX=/global/project/projectdirs/m669/nneveu/opal/2.1.0 ..
- 
-make -j8
-make install 
+#make -j8
+#make install 
 
