@@ -7,10 +7,10 @@ module load cray-hdf5-parallel
 P=H5hut
 V=${H5HUT_VERSION:-2.0.0rc4}
 
-export DOWNLOADS_DIR="/global/project/projectdirs/m669/nneveu/opal_builds/nersc"
+export DOWNLOADS_DIR="/global/homes/n/nneveu/opal_builds/nersc"
 mkdir -p "$DOWNLOADS_DIR/$P-$V"
 export SRC_DIR="$DOWNLOADS_DIR/$P-$V"
-#export PREFIX="/global/project/projectdirs/m669/nneveu/software/$P-$V"
+export PREFIX="/global/homes/n/nneveu/H5hut-2.0.0rc4_intel"
 
 FNAME="$P-$V.tar.gz"
 DOWNLOAD_URL="http://amas.web.psi.ch/Downloads/$P/${FNAME}"

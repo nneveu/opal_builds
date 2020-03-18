@@ -9,13 +9,13 @@ Title, string="AWA Photoinjector";
 //----------------------------------------------------------------------------
 //Global Parameters
 
-REAL n_particles         = 1.0E5;     //Number of particles in simulation.
+REAL n_particles         = 1.0E4;	//Number of particles in simulation.
 
 //Initial Momentum Calculation
-REAL Edes    = 1.4e-9; //initial energy in GeV
+REAL Edes    = 1.4e-9; 			//initial energy in GeV
 REAL gamma   = (Edes+EMASS)/EMASS; 
 REAL beta    = sqrt(1-(1/gamma^2));
-REAL P0      = gamma*beta*EMASS;    //inital z momentum
+REAL P0      = gamma*beta*EMASS;    	//inital z momentum
 
 //Printing initial energy and momentum to terminal output.
 value , {Edes, P0};
@@ -35,13 +35,13 @@ value , {Edes, P0};
 //
 
 REAL gun_inj_phase = 0.0;  // Rf injection phase (in degrees) with restpect 
-                      // to max phase. i.e. 0.0 inj phase corresponds 
-                      // to running on crest (max energy).
+                      	   // to max phase. i.e. 0.0 inj phase corresponds 
+                      	   // to running on crest (max energy).
 
 GUN:    RFCavity, L = 0.2927, VOLT = 60.0, ELEMEDGE = 0.0, TYPE = "STANDING",
-        FMAPFN = "/lcrc/project/AWA-beam-dynamics/FieldFiles/DriveFiles/DriveGun_2D.T7", 
+        FMAPFN = "fieldmaps/DriveGun_2D.T7", 
         FREQ = 1300.0, LAG = 0.0; 
-        //LAG (phase) is converted to radians
+        //LAG (phase) unit is radians
 
 //----------------------------------------------------------------------------
 // Solenoids
@@ -52,22 +52,25 @@ GUN:    RFCavity, L = 0.2927, VOLT = 60.0, ELEMEDGE = 0.0, TYPE = "STANDING",
 // FMAPFM:      Field file (string)
 
 // Note: OPAL scales the field file based on the max magnetic 
-// field value in the file, not Bz on axis. The max field 
+// field value in Bz on axis. The max field 
 // value is normalized to 1 [T], and scaled with KS. 
-// i.e. The max value in the BF_559 file = 0.162544398 [T]. 
-// Therefore, setting KS = 0.162544398 runs the magnet at max current.
 
-// Buck and Focusing Solenoid
+// Buck and Focusing (BK) Solenoid
+// Max value in Bz on axis for BF_550 file = 0.12017
+// Conversion from Current (I) to Scaling factor:
+// Scaling Factor (KS) = (I / Imax) * 0.12017
+// Where Imax for this BK solenoid = 550 [A]
+
 REAL IBF = 550;
 REAL KSBF = (IBF/550)*0.12017;
 
 BF: Solenoid, L = 0.5, ELEMEDGE=0.0, KS = KSBF,
-    FMAPFN = "/lcrc/project/AWA-beam-dynamics/FieldFiles/DriveFiles/BF_550_2D.T7";
+    FMAPFN = "fieldmaps/BF_550_2D.T7";
 
 // Matching Solenoid 
-// Max value in the M_440 file = 1.973966
+// Max value in Bz on axis for M_440 file = 0.61126
 // Conversion from Current (I) to Scaling factor:
-// Scaling Factor (KS) = (I / Imax) * 1.973966
+// Scaling Factor (KS) = (I / Imax) * 0.61126
 // Where Imax for this Matching solenoid = 440 [A]
 
 REAL ISF  = 273; //[A]
@@ -76,7 +79,7 @@ REAL SF = (ISF/440)*0.61126;
 value , {KSBF, SF};
 
 M:  Solenoid, L = 0.5, ELEMEDGE=0.0, KS = SF,
-    FMAPFN = "/lcrc/project/AWA-beam-dynamics/FieldFiles/DriveFiles/M_440_2D.T7";
+    FMAPFN = "fieldmaps/M_440_2D.T7";
 
 //----------------------------------------------------------------------------
 //Drift after gun.
@@ -113,34 +116,18 @@ DRIVE: Line = (GS, DR1);
 // These values are not necessary when using other models.
 
 // Note, If you want a Gaussian, in the longitudinal direction:
-//      TRISE/FALL = 1.6869*simgar
-//      Sigmar     = FWHM / 2.35 (this equation is only valid for 1.3 GHz)
-
+//      Sigmar     = FWHM / 2.35
+//      TRISE/FALL = 1.6869*simgar (for 1.3 GHz)
+ 
 Dist: DISTRIBUTION, TYPE = FLATTOP,
-        SIGMAX = 0.00075,
-        SIGMAY = 0.00075,
-        TRISE = 6.0e-12,       
-        TFALL = 6.0e-12,       
-        TPULSEFWHM = 20.0e-12, 
-        CUTOFFLONG = 4.0,
+        SIGMAX = 0.00075, // meters
+        SIGMAY = 0.00075, // meters
+        TRISE = 6.0e-12,  // seconds     
+        TFALL = 6.0e-12,  // seconds     
+        TPULSEFWHM = 20.0e-12, // seconds
+        CUTOFFLONG = 4.0, // sigma
         NBIN = 9,
-        //DEBIN = 1, 
-        EMISSIONSTEPS = 100,
-        EMISSIONMODEL = ASTRA,
-        EKIN = 0.55,           
-        EMITTED = True,        
-        WRITETOFILE = True;    //Saves the distribution to a text file
-
-Distxx: DISTRIBUTION, TYPE = GAUSS,
-        SIGMAX = 0.00075,
-        SIGMAY = 0.00075,
-        TRISE = 6.0e-12,       
-        TFALL = 6.0e-12,       
-        TPULSEFWHM = 20.0e-12, 
-        CUTOFFLONG = 4.0,
-        NBIN = 9,
-        //DEBIN = 1, 
-        EMISSIONSTEPS = 100,
+        EMISSIONSTEPS = 100, // number of steps to emit particles
         EMISSIONMODEL = ASTRA,
         EKIN = 0.55,           
         EMITTED = True,        
@@ -157,7 +144,7 @@ Distxx: DISTRIBUTION, TYPE = GAUSS,
 // for most efficient space charge calculation.
 
 FS_SC: Fieldsolver, FSTYPE = FFT, 
-            MX = 32, MY = 32, MT = 32, // SC grid size is 32^3
+            MX = 8, MY = 8, MT = 8, // SC grid size 
             PARFFTX = false, 
             PARFFTY = false, 
             PARFFTT = true,  // parallel in the z direction only
@@ -182,8 +169,7 @@ BEAM1:  BEAM, PARTICLE = ELECTRON, pc = P0, NPART = n_particles,
 TRACK, LINE = DRIVE, BEAM = BEAM1, MAXSTEPS = 1900000, 
     DT = {1.0e-13, 3.0e-12}, ZSTOP={0.4, 5.0};
 
-RUN, METHOD = "PARALLEL-T", BEAM = BEAM1, 
-    FIELDSOLVER = FS_SC, DISTRIBUTION = Dist;
+RUN, METHOD = "PARALLEL-T", BEAM = BEAM1, FIELDSOLVER = FS_SC, DISTRIBUTION = Dist;
 ENDTRACK;
 
 Stop;
