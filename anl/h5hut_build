@@ -1,0 +1,43 @@
+#!/bin/bash
+export XTPE_LINK_TYPE=dynamic
+export CRAYPE_LINK_TYPE=dynamic
+
+module load cray-hdf5-parallel
+# recipe for:
+P=H5hut
+V=${H5HUT_VERSION:-2.0.0rc4}
+
+export DOWNLOADS_DIR="/lcrc/project/MCS-SLAC/software/opal/"
+mkdir -p "$DOWNLOADS_DIR/$P-$V"
+export SRC_DIR="$DOWNLOADS_DIR/$P-$V"
+export PREFIX="/lcrc/project/MCS-SLAC/software/opal/"
+
+FNAME="$P-$V.tar.gz"
+DOWNLOAD_URL="http://amas.web.psi.ch/Downloads/$P/${FNAME}"
+SRC_FILE="${DOWNLOADS_DIR}/${FNAME}"
+
+# download
+test -r "${SRC_FILE}" || curl -L --output "$_" "${DOWNLOAD_URL}"
+
+# unpack
+mkdir -p "${SRC_DIR}" && cd "$_"
+tar xvf "${SRC_FILE}"
+
+
+#I_MPI_CC=cc;I_MPI_CXX=CC;I_MPI_F90=ftn;I_MPI_F77=ftn
+#export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
+#
+#CC=cc;CXX=CC;F90=ftn;F77=ftn
+#export CC CXX F90 F77 
+
+# configure
+mkdir -p "${SRC_DIR}/build" && cd "$_"
+CC=cc CXX=CC "${SRC_DIR}/$P-$V/configure" \
+        --prefix="${PREFIX}" \
+        --enable-shared \
+        --enable-parallel \
+        --with-pic
+# compile and install
+#make -j ${NJOBS}
+#make install
+
