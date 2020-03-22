@@ -22,19 +22,18 @@ export CRAYPE_LINK_TYPE=dynamic
 module load cmake 
 module remove darshan
 #module load cray-hdf5-parallel
-module load cray-hdf5-parallel/1.10.5.0
+module load cray-hdf5-parallel
 #module load h5hut-parallel #Using H5hut build from nersc 
 module load gsl   
 module load boost  
 #module load switch gcc/8.2.0 gcc/7.3.0 #/6.1.0 #This version needed for specific c++11 support?
 
-#export SOFTWARE="/global/homes/n/nneveu/software"
-#export PATH="$SOFTWARE/H5hut-2.0.0rc4_intel/:${PATH}"   
-#export H5HUT_HOME="/global/homes/n/nneveu/software/H5hut-2.0.0rc4_intel"
-#export H5HUT_PREFIX=$H5HUT_HOME
-#export H5HUT_DIR=$H5HUT_HOME
-#export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
-#export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
+export SOFTWARE="/global/cfs/cdirs/m669/nneveu/software/opal/"
+export H5HUT_HOME=$SOFTWARE/H5hut
+export H5HUT_PREFIX=$H5HUT_HOME
+export H5HUT_DIR=$H5HUT_HOME
+export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
+export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
 #
 #export BOOST_HOME=$SOFTWARE/boost-1.68
 #export BOOST_DIR=$BOOST_HOME
@@ -86,11 +85,11 @@ module load boost
 
 #5. Run cmake to configure build
 # Note: change the path to where you want the opal executable to be installed
-#cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software .. 
+#cmake -DCMAKE_INSTALL_PREFIX=/global/cfs/cdirs/m669/nneveu/software/opal ../src 
 
 #6. Run make and install to generate executables
-# > make -j 8 
-# > export DESTDIR="$HOME/Software/LocalInstall" && make -j4 install
+# > make -j 4 
+# > export DESTDIR="/global/cfs/cdirs/m669/nneveu/software/opal" && make -j4 install
 
 ####################################################################
 ###################################################################
