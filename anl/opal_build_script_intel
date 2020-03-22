@@ -1,6 +1,6 @@
 #!/bin/bash
 
-module purge
+#module purge
 
 #module load intel-parallel-studio/cluster.2017.4-wyg4gfu
 module load intel
@@ -9,7 +9,7 @@ module load cmake #/3.8.1-orygmpj
 module load gmp   #/6.1.2-jg3ofko
 module load mpfr  #/3.1.5-kdka53b
 module load mpc   #/1.0.3-vz2d2ni
-module load hdf5/1.10.1-wcenhsf  #/1.10.1-vzncl5h 
+module load hdf5/1.10.1-n3h76ta 
 module load gsl   #/2.4 
 module load boost #/1.66.0-yezpm5j #boost #/1.63.0-m64qkx4 #/1.63.0-yyrgc3r
 module load intel-mkl
@@ -23,14 +23,18 @@ CC=mpiicc;CXX=mpiicpc;F90=ifort;F77=ifort
 export CC CXX F90 F77
 
 
-export SOFTWARE="/lcrc/project/AWA-beam-dynamics/software"
-export PATH="$SOFTWARE/H5hut-2.0.0rc4_build:${PATH}"
-
-export H5HUT_HOME=$SOFTWARE/H5hut-2.0.0rc4_build
+export SOFTWARE="/lcrc/project/MCS-SLAC/software"
+export H5HUT_HOME=$SOFTWARE/opal/H5hut
 export H5HUT_PREFIX=$H5HUT_HOME
 export H5HUT_DIR=$H5HUT_HOME
 export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
 export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
+export H5Hut_INCLUDE_DIR=$H5HUT_HOME/include
+export H5Hut_LIBRARY=$H5HUT_HOME/lib
+#export C_INCLUDE_PATH=$H5HUT_HOME/include:$C_INCLUDE_PATH
+#export CPLUS_INCLUDE_PATH=$H5HUT_HOME/include:$CPLUS_INCLUDE_PATH
+#export LD_LIBRARY_PATH=$H5HUT_HOME/lib:$LD_LIBRARY_PATH
+#export LIBRARY_PATH=$H5HUT_HOME/lib:$LIBRARY_PATH
 
 #export BOOST_HOME=$SOFTWARE/boost_1_62_0_build/
 #export BOOST_DIR=$BOOST_HOME
@@ -41,6 +45,16 @@ export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
 #echo $BOOST_ROOT
 #echo $BOOST_DIR
 
+cd /lcrc/project/MCS-SLAC/software/opal/src
+git pull
+git checkout OPAL-2.2
+cd /lcrc/project/MCS-SLAC/software/opal/build
+#mkdir -p "${SRC_DIR}/OPAL/build" && cd "$_"
+
+# Example from OPAL dev page:
+#CC=mpicc CXX=mpicxx cmake \
+#        --prefix="${PREFIX}" \
+#        "${SRC_DIR}/OPAL/src"
 
 #########################################################
 #ABOVE NEEDED FOR ALL BUILDS
@@ -51,8 +65,8 @@ export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
 #cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software -DCMAKE_CXX_FLAGS="-lsz" ..
 
 #LATEST CMAKE CALL:
-#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/AWA-beam-dynamics/software/bdw -DCMAKE_CXX_FLAGS="-lsz -axCORE-AVX2" .. 
-#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/AWA-beam-dynamics/software/knl -DCMAKE_CXX_FLAGS="-lsz -axMIC-AVX512" ..
+#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/MCS-SLAC/software/opal/bdw -DCMAKE_CXX_FLAGS="-lsz -axCORE-AVX2" ../src 
+#cmake -DCMAKE_INSTALL_PREFIX=/lcrc/project/MCS-SLAC/software/opal/knl -DCMAKE_CXX_FLAGS="-lsz -axMIC-AVX512" ../src
 
 #Include intel opt reports:
 #cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software/opal-1.9/knl -DCMAKE_CXX_FLAGS="-lsz -axMIC-AVX512 -qopt-report=3 -qopt-report-phase=vec" ..  
