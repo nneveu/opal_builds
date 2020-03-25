@@ -1,14 +1,13 @@
 #!/bin/bash
-export XTPE_LINK_TYPE=dynamic
-export CRAYPE_LINK_TYPE=dynamic
 
-module load cray-hdf5-parallel
+module load intel-parallel-studio/cluster.2017.4-wyg4gfu
+module load hdf5/1.10.1-n3h76ta
 
 # recipe for:
 P=H5hut
 V=${H5HUT_VERSION:-2.0.0rc6}
 
-export DOWNLOADS_DIR="/project/projectdirs/m669/nneveu/software/opal/$P"
+export DOWNLOADS_DIR="/lcrc/project/MCS-SLAC/software/opal/$P"
 mkdir -p "$DOWNLOADS_DIR/"
 export SRC_DIR="$DOWNLOADS_DIR/"
 export PREFIX="$DOWNLOADS_DIR/"
@@ -26,15 +25,12 @@ tar xvf "${SRC_FILE}"
 cd "${SRC_DIR}/$P-$V"
 ./autogen.sh || exit 1
 
-#I_MPI_CC=cc;I_MPI_CXX=CC;I_MPI_F90=ftn;I_MPI_F77=ftn
-#export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
-#
-#CC=cc;CXX=CC;F90=ftn;F77=ftn
-#export CC CXX F90 F77 
+CC=mpiicc;CXX=mpiicpc;F90=ifort;F77=ifort
+export CC CXX F90 F77
 
 # configure
 mkdir -p "${SRC_DIR}/build" && cd "$_"
-CC=cc CXX=CC "${SRC_DIR}/$P-$V/configure" \
+CC=mpiicc CXX=mpiicpc "${SRC_DIR}/$P-$V/configure" \
         --prefix="${PREFIX}" \
         --enable-shared \
         --enable-parallel \
