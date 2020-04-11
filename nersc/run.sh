@@ -6,7 +6,7 @@
 #SBATCH -C knl
 #####SBATCH --tasks-per-node=68
 
-export opal=/global/cfs/cdirs/m669/nneveu/software/opal/
+export opal=/global/cfs/cdirs/m669/nneveu/software/opal/bin/opal
 cd $SLURM_SUBMIT_DIR
 
 #Test
