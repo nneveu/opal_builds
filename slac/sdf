@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+#Modules needed for opal
+module remove openmpi
+module load mpi/mpich-3.2-x86_64 
+module load gcc/9.3.1
+
+export PREFIX=/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL
+export SRC_DIR="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/"
+export H5HUT_INCLUDE_DIR="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL/include"
+export H5HUT_LIBRARY="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL/lib" 
+export PATH="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL:$PATH"
+export LIBRARY_PATH="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL/lib:$LIBRARY_PATH"
+export LD_LIBRARY_PATH="/gpfs/slac/staas/fs1/g/g.beamphysics/neveu/software/2022/OPAL/lib:$LD_LIBRARY_PATH"
+#
+#mkdir -p "${SRC_DIR}/OPAL"
+#cd "${SRC_DIR}/OPAL"
+#git clone https://gitlab.psi.ch/OPAL/src.git
+#
+#cd "${SRC_DIR}/OPAL/src"
+#git checkout OPAL-2021.1
+
+
+
+## Point to icc and icpc
+CC=mpicc;CXX=mpicxx;F90=ftn;F77=ftn
+export CC CXX F90 F77
+#
+
+#
+##cmake -DCMAKE_INSTALL_PREFIX=/gpfs/slac/g/g.beamphysics/opal_test/software -DCMAKE_CXX_FLAGS="-lsz -skylake-avx512" .. 
+#cmake3 --prefix="${PREFIX}" "${SRC_DIR}/OPAL/src"
+cmake3 --prefix="${PREFIX}" -DCMAKE_CXX_FLAGS="-lblas -lgsl" "${SRC_DIR}/OPAL/src"
+#
