@@ -35,3 +35,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PREFIX
 #CC=mpicc CXX=mpicxx cmake -DBUILD_OPAL_PYTHON=ON -DCMAKE_INSTALL_PREFIX=/sdf/home/n/nneveu/sdf_beamphysics/nneveu/opal/OPAL/install "${SRC_DIR}/OPAL/src"
 
 #cmake -DMPI_C_COMPILER=gcc -DMPI_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=/sdf/home/n/nneveu/sdf_beamphysics/nneveu/opal/OPAL/install "${SRC_DIR}/OPAL/src"
+
+#ignore uninitialized error with this in ccmake:
+#CMAKE_CXX_FLAGS=-Wno-error=uninitialized
+cmake -DMPI_C_COMPILER=mpicc -DMPI_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_PREFIX=/sdf/home/n/nneveu/sdf_beamphysics/nneveu/opal/OPAL/install "${SRC_DIR}/OPAL/src"
